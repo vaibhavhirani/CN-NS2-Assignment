@@ -58,7 +58,12 @@ proc finish {} {
 	close $nf
 	close $f
 	puts "running nam..."
-	exec nam out.nam &
+	#exec nam out.nam &
+	exec awk -f throughput_router_receiver.awk udp.tr > tp_router_receiver.tr &
+    #exec xgraph __out0.tr __out1.tr -geometry 800x400 &
+	#Intermittent issue when executing xgraph directly from the code.
+	# Solution - run this command in the same directory "xgraph tp_router_receiver.tr"
+    exec xgraph tp_router_receiver.tr -geometry 800x400 &
         exit 0
 }
 
