@@ -5,11 +5,14 @@ set val(stop)   60.0
 #Define tracefile o/p
 set f0 [open __out0.tr w]
 set f1 [open __out1.tr w]
+set fall [open __outAll.tr w]
 
 #Create a ns simulator
 set ns [new Simulator]
 
 set namfile [open out.nam w]
+
+$ns trace-all $fall
 $ns namtrace-all $namfile
 
 #Create 4 nodes
@@ -86,19 +89,27 @@ proc record {} {
 
 #Runs at End
 proc finish {} {
-    global ns namfile f0 f1
+    global ns namfile f0 f1 fall
     $ns flush-trace
     close $namfile
     close $f0
     close $f1
+    close $fall
+
+    #exec nam out.nam &
+    exec awk -f throughput_out.awk __outAll.tr > output0.tr &
+    exec awk -f throughput_router_receiver.awk __outAll.tr > tp_reouter_receiver.tr &
     exec xgraph __out0.tr __out1.tr -geometry 800x400 &
+    exec xgraph tp_reouter_receiver.tr -geometry 800x400 & 
+    exec xgraph output0.tr -geometry 800x400 & 
     	exit 0
 }
 
 #Setting Congestion and Advertised window
 set cwnd0 [$tcp0 set cwnd_ 1000]
-set cwnd1 [$tcp1 set cwnd_ 1000]
 set awnd0 [$tcp0 set awnd_ 1000]
+
+set cwnd1 [$tcp1 set cwnd_ 1000]
 set awnd1 [$tcp1 set awnd_ 1000]
 
 
