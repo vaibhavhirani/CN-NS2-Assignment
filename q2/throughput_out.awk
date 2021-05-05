@@ -3,7 +3,7 @@ BEGIN {
     time=0;
 }
 {
-if ($1 == "r" && $3 == "2" && $4 == "3") {
+if ($1 == "r" && $3 == "0" && $4 == "1") {
     pkt=pkt+$6;
     time=$2;
     printf("%f\t %d\n", time, pkt);
