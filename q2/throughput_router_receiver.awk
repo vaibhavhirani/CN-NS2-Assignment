@@ -10,5 +10,5 @@ if ($1 == "r" && $3 == "3" && $4 == "2") {
 }
 }
 END {
-    printf("throughput%fMbps", ((pkt/time)*(8/1024)))
+    #printf("throughput%fMbps", ((pkt/time)*(8/1024)))
 }
